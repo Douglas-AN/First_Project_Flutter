@@ -1,7 +1,6 @@
-import "dart:math";
-
-import "package:flutter/material.dart";
-import "package:gamestore/models/game.dart";
+import 'package:flutter/material.dart';
+import 'package:gamestore/models/game.dart';
+import 'package:gamestore/pages/detail/detail.dart';
 
 class PopularGame extends StatelessWidget {
   PopularGame({super.key});
@@ -13,23 +12,37 @@ class PopularGame extends StatelessWidget {
     return SizedBox(
       height: 200,
       child: ListView.separated(
-        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 25,
+          vertical: 20,
+        ),
         scrollDirection: Axis.horizontal,
-        itemBuilder: ((context, index) => GestureDetector(
-              onTap: (() => print('on tap')),
-              child: Card(
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)),
-                child: Container(
-                    padding: EdgeInsets.all(5),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: Image.asset(games[index].bgImage),
-                    )),
+        itemBuilder: (context, index) => GestureDetector(
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => DetailPage(games[index]),
+            ),
+          ),
+          child: Card(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Container(
+              padding: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
               ),
-            )),
-        separatorBuilder: ((context, index) => const SizedBox(width: 10)),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Hero(
+                    tag: games[index].name,
+                    child: Image.asset(games[index].bgImage)),
+              ),
+            ),
+          ),
+        ),
+        separatorBuilder: (context, index) => const SizedBox(width: 10),
         itemCount: games.length,
       ),
     );
